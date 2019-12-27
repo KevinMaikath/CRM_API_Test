@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from rest_framework.authtoken.models import Token
 
 from CRM_API.models import Customer
 
@@ -37,5 +38,5 @@ class UserSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data['password'])
         user.save()
-        # TODO create an authentication token for the new user
+        Token.objects.create(user=user)
         return user

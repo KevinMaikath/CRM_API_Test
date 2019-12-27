@@ -1,9 +1,11 @@
+from django.contrib.auth import authenticate
+
 from CRM_API.models import Customer
-from CRM_API.serializers import CustomerSerializer
+from CRM_API.serializers import CustomerSerializer, UserSerializer
 
 from django.shortcuts import get_object_or_404
 
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -72,3 +74,24 @@ class CustomerDetail(APIView):
         data = {'message': 'The customer has been successfully deleted'}
         return Response(data, status=status.HTTP_202_ACCEPTED)
 
+
+# User login for authentication
+class LoginView(APIView):
+    permission_classes = ()
+
+    def post(self, request, ):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = authenticate(username=username, password=password)
+        if user:
+            return Response({'token': user.auth_token.key})
+        else:
+            return Response({"error": "Wrong Credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserCreate(generics.CreateAPIView):
+    serializer_class = UserSerializer
+
+    # Override global authentication settings
+    authentication_classes = ()
+    permission_classes = ()
