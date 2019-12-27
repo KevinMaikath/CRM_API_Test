@@ -49,7 +49,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'KevinMaikath_CRM_API_Test.urls'
+ROOT_URLCONF = 'main.urls'
 
 TEMPLATES = [
     {
