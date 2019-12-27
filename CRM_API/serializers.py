@@ -8,10 +8,19 @@ class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = '__all__'
-        extra_kwargs = {
-            'created_by': {'write_only': True},
-            'last_updated_by': {'write_only': True}
-        }
+        # extra_kwargs = {
+        #     'created_by': {'write_only': True},
+        #     'last_updated_by': {'write_only': True}
+        # }
+
+    def update(self, instance, validated_data):
+        print(instance.last_updated_by_id)
+        instance.name = validated_data.get('name', instance.name)
+        instance.surname = validated_data.get('surname', instance.surname)
+        instance.imgUrl = validated_data.get('imgUrl', instance.imgUrl)
+        instance.last_updated_by_id = validated_data.get('last_updated_by', instance.last_updated_by_id)
+        instance.save()
+        return instance
 
 
 class UserSerializer(serializers.ModelSerializer):
