@@ -8,6 +8,10 @@ class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = '__all__'
+        extra_kwargs = {
+            'created_by': {'write_only': True},
+            'last_updated_by': {'write_only': True}
+        }
 
 
 class UserSerializer(serializers.ModelSerializer):
