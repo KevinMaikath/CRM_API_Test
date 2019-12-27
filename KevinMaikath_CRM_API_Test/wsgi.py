@@ -1,5 +1,5 @@
 """
-WSGI config for main project.
+WSGI config for KevinMaikath_CRM_API_Test project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'main.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'KevinMaikath_CRM_API_Test.settings')
 
 application = get_wsgi_application()
