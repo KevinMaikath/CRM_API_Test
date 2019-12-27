@@ -13,6 +13,7 @@ class CustomerSerializer(serializers.ModelSerializer):
         #     'last_updated_by': {'write_only': True}
         # }
 
+
     def update(self, instance, validated_data):
         print(instance.last_updated_by_id)
         instance.name = validated_data.get('name', instance.name)

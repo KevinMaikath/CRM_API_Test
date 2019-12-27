@@ -1,5 +1,3 @@
-from django.contrib.auth.models import User
-
 from CRM_API.models import Customer
 from CRM_API.serializers import CustomerSerializer
 
@@ -21,7 +19,10 @@ class CustomerList(APIView):
         name = request.data.get('name')
         surname = request.data.get('surname')
         imgUrl = request.data.get('imgUrl')
-        user = request.user.pk
+        if not imgUrl:
+            imgUrl = 'No image yet'
+        # user = request.user.pk
+        user = 2
         data = {'name': name, 'surname': surname, 'imgUrl': imgUrl, 'created_by': user, 'last_updated_by': user}
         customer_serial = CustomerSerializer(data=data)
 
@@ -70,3 +71,4 @@ class CustomerDetail(APIView):
         customer.delete()
         data = {'message': 'The customer has been successfully deleted'}
         return Response(data, status=status.HTTP_202_ACCEPTED)
+
