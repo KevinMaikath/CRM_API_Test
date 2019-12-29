@@ -1,7 +1,9 @@
 # CRM_API_Test
 CRM Service - API using Django-REST-Framework
 
+
 ## Project set-up
+
 
 ### Dependencies
 This project has been developed using a virtual environment. In order to install all the dependencies needed for this project, run the following steps in your terminal:
@@ -10,11 +12,12 @@ This project has been developed using a virtual environment. In order to install
 ```Shell
 pip install virtualenv
 ```
-3. In the projects root directory, create a new virtual environment.
+3. Inside the project's root directory, create a new virtual environment.
 ```Shell
 virtualenv venv
 ```
 (The command above creates and initializes a virtual environment called 'venv')
+
 4. Inside 'venv', install the project dependencies.
 ```Shell
 pip install -r requirements.txt
@@ -36,7 +39,7 @@ python manage.py runserver
 
 
 #### Authentication
-This API uses token authentication. To get the token of an exiting user:
+This API uses token authentication. To get the token from an exiting user:
 1. Send a POST request to '\login', providing the username and the password. If the login is successful, it will return the corresponding token.
 2. Use this token for authentication in every other request. Set it as an HTTP Header called 'Authorization', and the token in the value field. For example, for a given token '1234', the header would be the following:
 ```
@@ -44,8 +47,23 @@ This API uses token authentication. To get the token of an exiting user:
 ```
 
 
+#### Superuser creation
+Creating a superuser is always needed to start using the API, as the database might be initially empty and you will probably need to create other users. In order to create a new superuser, run the next command in your terminal:
+```Shell
+python manage.py createsuperuser
+```
+
+Now you should assign an authentication token for this superuser, so that you can create other users and access to the customers data. To do so, run the following commands in a python shell (inside your virtual environment):
+```Python
+>>> from rest_framework.authtoken.models import Token
+>>> from django.contrib.auth.models import User
+>>> user = User.objects.filter(id={superuserID}).first()
+>>> Token.objects.create(user=user)
+```
+
+
 #### User creation
-To create a new user, send a POST request to '\users', specifying the username, email and password. No authorization is needed for this request.
+To create a new user, send a POST request to '\users', specifying the username, email and password. You need to be authenticated for this action, and **only superusers can create other users**.
 
 The password will be stored as a hash value for security. The username can't be repeated in the database. An authorization token will be automatically provided to the user when created.
 
@@ -60,8 +78,8 @@ These are all the available requests to get and manipulate the customers data. T
       - surname: customers surname.
       - imgUrl: URL for the customers image.
       
-'imgUrl' field is optional. If it isn't set in the request, it will get the default value 'No image yet'.
-      
+'img_url' field is optional. If it isn't set in the request, it will get the default value 'No image yet'
+
 - '/customer/{customerID}'
   - PUT: updates the specified customer. All parameters are optional.
   - DELETE: deletes the specified customer.
