@@ -24,12 +24,42 @@ pip install -r requirements.txt
 ```
 
 ### Database set-up
-This project currently uses a local sqlite3 database. In order to setup this database, follow the next steps:
-1. Create the file 'db.sqlite3' in the projects root directory.
+This project initially uses a local sqlite3 database. In order to setup this database, follow the next steps:
+1. Create the file 'db.sqlite3' in the project's root directory.
 2. Initialize the database:
 ```Shell
 python manage.py migrate
 ```
+
+### MySQL migration
+The sqlite3 database is suitable and can store a good amount of data for small projects. However, for bigger projects, you can make use of a larger, remote database like MySQL. In order to set-up this API for MySQL, just follow the next steps:
+1. Install 'mysqlclient'.
+```Shell
+pip install mysqlclient
+```
+2. Configure the project's settings. Inside 'KevinMaikath_CRM_API_Test/settings.py' you have the initial database settings:
+```Python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+```
+Change it to the following:
+```Python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': '<DATABASE_NAME>',
+        'USER': '<YOUR_USER>',
+        'PASSWORD': '<YOUR_PASSWORD>',
+        'HOST': '<MYSQL_SERVER_IP>',
+        'PORT': '<MYSQL_SERVER_PORT>',
+    }
+}
+```
+
 
 ## API Usage
 To run the API project:
@@ -55,10 +85,10 @@ python manage.py createsuperuser
 
 Now you should assign an authentication token for this superuser, so that you can create other users and access to the customers data. To do so, run the following commands in a python shell (inside your virtual environment):
 ```Python
->>> from rest_framework.authtoken.models import Token
->>> from django.contrib.auth.models import User
->>> user = User.objects.filter(id={superuserID}).first()
->>> Token.objects.create(user=user)
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
+user = User.objects.filter(id={superuserID}).first()
+Token.objects.create(user=user)
 ```
 
 
