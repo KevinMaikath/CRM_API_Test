@@ -21,7 +21,7 @@ class CustomerList(APIView):
         surname = request.data.get('surname')
         img_url = request.data.get('img_url')
         if not img_url:
-            img_url = 'No image yet'
+            img_url = 'no_image'
         user = request.user.pk
         data = {'name': name, 'surname': surname, 'img_url': img_url, 'created_by': user, 'last_updated_by': user}
         customer_serial = CustomerCreationSerializer(data=data)
