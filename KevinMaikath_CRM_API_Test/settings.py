@@ -133,4 +133,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 IMAGE_FOLDER = 'images/'
 IMAGE_FORMAT = 'png'
+IMAGE_MAX_HEIGHT = 300
+IMAGE_MAX_WIDTH = 300
 DEFAULT_IMAGE_FILE = 'default.png'

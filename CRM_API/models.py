@@ -32,7 +32,7 @@ class Customer(models.Model):
 
         img = Image.open(self.img_url.path)
 
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
+        if img.height > settings.IMAGE_MAX_HEIGHT or img.width > settings.IMAGE_MAX_WIDTH:
+            output_size = (settings.IMAGE_MAX_HEIGHT, settings.IMAGE_MAX_WIDTH)
             img.thumbnail(output_size)
             img.save(self.img_url.path)
