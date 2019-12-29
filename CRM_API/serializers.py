@@ -8,7 +8,7 @@ from CRM_API.models import Customer
 class CustomerInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ('id', 'name', 'surname', 'imgUrl')
+        fields = ('id', 'name', 'surname', 'img_url')
 
 
 class CustomerCreationSerializer(serializers.ModelSerializer):
@@ -19,7 +19,7 @@ class CustomerCreationSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
         instance.surname = validated_data.get('surname', instance.surname)
-        instance.imgUrl = validated_data.get('imgUrl', instance.imgUrl)
+        instance.img_url = validated_data.get('img_url', instance.img_url)
         instance.last_updated_by_id = validated_data.get('last_updated_by', instance.last_updated_by_id)
         instance.save()
         return instance

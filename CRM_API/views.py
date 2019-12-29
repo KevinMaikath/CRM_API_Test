@@ -19,11 +19,11 @@ class CustomerList(APIView):
     def post(self, request):
         name = request.data.get('name')
         surname = request.data.get('surname')
-        imgUrl = request.data.get('imgUrl')
-        if not imgUrl:
-            imgUrl = 'No image yet'
+        img_url = request.data.get('img_url')
+        if not img_url:
+            img_url = 'No image yet'
         user = request.user.pk
-        data = {'name': name, 'surname': surname, 'imgUrl': imgUrl, 'created_by': user, 'last_updated_by': user}
+        data = {'name': name, 'surname': surname, 'img_url': img_url, 'created_by': user, 'last_updated_by': user}
         customer_serial = CustomerCreationSerializer(data=data)
 
         if customer_serial.is_valid():
@@ -50,12 +50,12 @@ class CustomerDetail(APIView):
         if not surname:
             surname = customer.surname
 
-        imgUrl = request.data.get('imgUrl')
-        if not imgUrl:
-            imgUrl = customer.imgUrl
+        img_url = request.data.get('img_url')
+        if not img_url:
+            img_url = customer.img_url
 
         user = request.user.pk
-        data = {'name': name, 'surname': surname, 'imgUrl': imgUrl,
+        data = {'name': name, 'surname': surname, 'img_url': img_url,
                 'created_by': customer.created_by_id,
                 'last_updated_by': user}
         customer_serial = CustomerCreationSerializer(data=data)

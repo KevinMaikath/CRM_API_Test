@@ -7,7 +7,7 @@ class Customer(models.Model):
     surname = models.CharField(max_length=20)
 
     # Currently use URL as image. It can be later migrated to an image file.
-    imgUrl = models.TextField()
+    img_url = models.TextField()
 
     created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='customer_created_by')
     last_updated_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='customer_last_updated_by')
