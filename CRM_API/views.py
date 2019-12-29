@@ -70,7 +70,7 @@ class CustomerDetail(APIView):
     def delete(self, request, pk):
         customer = get_object_or_404(Customer, pk=pk)
         customer.delete()
-        data = {'message': 'The customer has been successfully deleted'}
+        data = {'message': 'The customer has been successfully deleted.'}
         return Response(data, status=status.HTTP_202_ACCEPTED)
 
 
@@ -88,9 +88,20 @@ class LoginView(APIView):
             return Response({"error": "Wrong Credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserCreate(generics.CreateAPIView):
-    serializer_class = UserSerializer
+# User creation. Only superusers can create other users.
+class UserCreate(APIView):
+    def post(self, request):
+        if not request.user.is_superuser:
+            data = {'message': "You don't have enough permissions for this action."}
+            return Response(data, status=status.HTTP_401_UNAUTHORIZED)
+        username = request.data.get('username')
+        password = request.data.get('password')
+        email = request.data.get('email')
+        data = {'username': username, 'password': password, 'email': email}
+        user_serial = UserSerializer(data=data)
 
-    # Override global authentication settings
-    authentication_classes = ()
-    permission_classes = ()
+        if user_serial.is_valid():
+            user_serial.save()
+            return Response(user_serial.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(user_serial.errors, status=status.HTTP_400_BAD_REQUEST)
