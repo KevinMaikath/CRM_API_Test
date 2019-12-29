@@ -26,7 +26,7 @@ class Customer(models.Model):
     def __str__(self):
         return f'Customer: {self.surname}, {self.name}'
 
-    # Crop the image to maximum 300x300
+    # Crop the image if necessary.
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 

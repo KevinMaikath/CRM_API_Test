@@ -37,6 +37,7 @@ The sqlite3 database is suitable and can store a good amount of data for small p
 ```Shell
 pip install mysqlclient
 ```
+
 2. Configure the project's settings. Inside 'KevinMaikath_CRM_API_Test/settings.py' you have the initial database settings:
 ```Python
 DATABASES = {
@@ -60,6 +61,17 @@ DATABASES = {
 }
 ```
 
+#### Image upload settings
+Image upload settings are located at 'KevinMaikath_CRM_API_Test/settings.py'. The initial values are the following:
+```Python
+IMAGE_FOLDER = 'images/'
+IMAGE_FORMAT = 'png'
+IMAGE_MAX_HEIGHT = 300
+IMAGE_MAX_WIDTH = 300
+DEFAULT_IMAGE_FILE = 'default.png'
+```
+
+As the image field is optional for customer creation, it is necessary to manually store a default image in the images folder ('media/images/' by default). This way, every new user without image will take the default one.
 
 ## API Usage
 To run the API project:
@@ -103,13 +115,23 @@ These are all the available requests to get and manipulate the customers data. T
 
 - '/customers'
   - GET: returns a list with all the customers.
-  - POST: creates a customer instance into the database. Required parameters:
-      - name: customers name.
-      - surname: customers surname.
-      - imgUrl: URL for the customers image.
+  - POST: creates a customer instance into the database. 
+  
+    Required parameters:
+      - `name`: customers name.
+      - `surname`: customers surname.
       
-'img_url' field is optional. If it isn't set in the request, it will get the default value 'No image yet'
+      Optional parameters:
+      - `img_url`: URL for the customers image.
 
 - '/customer/{customerID}'
-  - PUT: updates the specified customer. All parameters are optional.
+  - PUT: updates the specified customer. All parameters (`name`, `surname` and `img_url`) are optional.
   - DELETE: deletes the specified customer.
+
+
+- To get a customer's image, send a GET request to it's `img_url`. For example, if you want to get the default image: '/media/images/default.png'
+
+#### Image uploads
+Whenever customer with an image is created, the image will be stored in the project's image folder (configured in 'settings.py'). If no image is set when creating a customer, it will automatically get the default one.
+
+In order to decrease the image storage capacity, every uploaded image will be cropped if it doesn't fit the maximum configured size. Moreover, when a customer's image is updated, the previous image will be removed from the images folder.
