@@ -1,16 +1,23 @@
 from PIL import Image
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 
 
+# Creates an url with the project's setting values, formatting the image to the project's default image format.
 def custom_upload_path(instance, filename):
-    return f'images/{instance.name}_image.png'
+    file_str = str(filename)
+    dot = file_str.index('.')
+    file_str = file_str[:dot+1]
+
+    return f'{settings.IMAGE_FOLDER}{file_str}{settings.IMAGE_FORMAT}'
 
 
 class Customer(models.Model):
     name = models.CharField(max_length=20)
     surname = models.CharField(max_length=20)
-    img_url = models.ImageField(upload_to=custom_upload_path, max_length=100)
+    img_url = models.ImageField(upload_to=custom_upload_path, max_length=100,
+                                default=settings.IMAGE_FOLDER + settings.DEFAULT_IMAGE_FILE)
 
     created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='customer_created_by')
     last_updated_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='customer_last_updated_by')

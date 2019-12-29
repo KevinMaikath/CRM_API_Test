@@ -1,3 +1,5 @@
+from PIL import Image
+
 from CRM_API.models import Customer
 from CRM_API.serializers import CustomerInfoSerializer, CustomerCreationSerializer, UserSerializer
 
@@ -20,10 +22,11 @@ class CustomerList(APIView):
         name = request.data.get('name')
         surname = request.data.get('surname')
         img_url = request.data.get('img_url')
-        if not img_url:
-            img_url = 'no_image'
         user = request.user.pk
-        data = {'name': name, 'surname': surname, 'img_url': img_url, 'created_by': user, 'last_updated_by': user}
+        if not img_url:
+            data = {'name': name, 'surname': surname, 'created_by': user, 'last_updated_by': user}
+        else:
+            data = {'name': name, 'surname': surname, 'img_url': img_url, 'created_by': user, 'last_updated_by': user}
         customer_serial = CustomerCreationSerializer(data=data)
 
         if customer_serial.is_valid():
@@ -61,7 +64,7 @@ class CustomerDetail(APIView):
         customer_serial = CustomerCreationSerializer(data=data)
 
         if customer_serial.is_valid():
-            customer_serial.update(customer, customer_serial.data)
+            customer_serial.update(customer, data)
             customer_info = CustomerInfoSerializer(customer)
             return Response(customer_info.data, status=status.HTTP_202_ACCEPTED)
         else:

@@ -128,6 +128,9 @@ REST_FRAMEWORK = {
     )
 }
 
-# Image upload folder
+# Image upload
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+IMAGE_FOLDER = 'images/'
+IMAGE_FORMAT = 'png'
+DEFAULT_IMAGE_FILE = 'default.png'
