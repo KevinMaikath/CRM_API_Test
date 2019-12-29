@@ -5,18 +5,18 @@ from rest_framework.authtoken.models import Token
 from CRM_API.models import Customer
 
 
-class CustomerSerializer(serializers.ModelSerializer):
+class CustomerInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = ('id', 'name', 'surname', 'imgUrl')
+
+
+class CustomerCreationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = '__all__'
-        # extra_kwargs = {
-        #     'created_by': {'write_only': True},
-        #     'last_updated_by': {'write_only': True}
-        # }
-
 
     def update(self, instance, validated_data):
-        print(instance.last_updated_by_id)
         instance.name = validated_data.get('name', instance.name)
         instance.surname = validated_data.get('surname', instance.surname)
         instance.imgUrl = validated_data.get('imgUrl', instance.imgUrl)

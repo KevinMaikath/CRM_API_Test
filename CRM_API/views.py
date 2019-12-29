@@ -1,8 +1,7 @@
-from django.contrib.auth import authenticate
-
 from CRM_API.models import Customer
-from CRM_API.serializers import CustomerSerializer, UserSerializer
+from CRM_API.serializers import CustomerInfoSerializer, CustomerCreationSerializer, UserSerializer
 
+from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 
 from rest_framework import status, generics
@@ -14,7 +13,7 @@ from rest_framework.views import APIView
 class CustomerList(APIView):
     def get(self, request):
         customers = Customer.objects.all()
-        data = CustomerSerializer(customers, many=True).data
+        data = CustomerInfoSerializer(customers, many=True).data
         return Response(data)
 
     def post(self, request):
@@ -23,10 +22,9 @@ class CustomerList(APIView):
         imgUrl = request.data.get('imgUrl')
         if not imgUrl:
             imgUrl = 'No image yet'
-        # user = request.user.pk
-        user = 2
+        user = request.user.pk
         data = {'name': name, 'surname': surname, 'imgUrl': imgUrl, 'created_by': user, 'last_updated_by': user}
-        customer_serial = CustomerSerializer(data=data)
+        customer_serial = CustomerCreationSerializer(data=data)
 
         if customer_serial.is_valid():
             customer_serial.save()
@@ -39,7 +37,7 @@ class CustomerList(APIView):
 class CustomerDetail(APIView):
     def get(self, request, pk):
         customer = get_object_or_404(Customer, pk=pk)
-        data = CustomerSerializer(customer).data
+        data = CustomerInfoSerializer(customer).data
         return Response(data)
 
     def put(self, request, pk):
@@ -56,15 +54,16 @@ class CustomerDetail(APIView):
         if not imgUrl:
             imgUrl = customer.imgUrl
 
-        # user = request.user.pk
-        user = 1
-        data = {'name': name, 'surname': surname, 'imgUrl': imgUrl, 'created_by': customer.created_by_id,
+        user = request.user.pk
+        data = {'name': name, 'surname': surname, 'imgUrl': imgUrl,
+                'created_by': customer.created_by_id,
                 'last_updated_by': user}
-        customer_serial = CustomerSerializer(data=data)
+        customer_serial = CustomerCreationSerializer(data=data)
 
         if customer_serial.is_valid():
             customer_serial.update(customer, customer_serial.data)
-            return Response(customer_serial.data, status=status.HTTP_202_ACCEPTED)
+            customer_info = CustomerInfoSerializer(customer)
+            return Response(customer_info.data, status=status.HTTP_202_ACCEPTED)
         else:
             return Response(customer_serial.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -75,7 +74,7 @@ class CustomerDetail(APIView):
         return Response(data, status=status.HTTP_202_ACCEPTED)
 
 
-# User login for authentication
+# User login for authentication.
 class LoginView(APIView):
     permission_classes = ()
 
