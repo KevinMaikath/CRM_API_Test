@@ -61,7 +61,7 @@ DATABASES = {
 }
 ```
 
-#### Image upload settings
+### Image upload settings
 Image upload settings are located at 'KevinMaikath_CRM_API_Test/settings.py'. The initial values are the following:
 ```Python
 IMAGE_FOLDER = 'images/'
@@ -80,7 +80,7 @@ python manage.py runserver
 ```
 
 
-#### Authentication
+### Authentication
 This API uses token authentication. To get the token from an exiting user:
 1. Send a POST request to '\login', providing the username and the password. If the login is successful, it will return the corresponding token.
 2. Use this token for authentication in every other request. Set it as an HTTP Header called 'Authorization', and the token in the value field. For example, for a given token '1234', the header would be the following:
@@ -89,7 +89,7 @@ This API uses token authentication. To get the token from an exiting user:
 ```
 
 
-#### Superuser creation
+### Superuser creation
 Creating a superuser is always needed to start using the API, as the database might be initially empty and you will probably need to create other users. In order to create a new superuser, run the next command in your terminal:
 ```Shell
 python manage.py createsuperuser
@@ -104,13 +104,13 @@ Token.objects.create(user=user)
 ```
 
 
-#### User creation
+### User creation
 To create a new user, send a POST request to '\users', specifying the username, email and password. You need to be authenticated for this action, and **only superusers can create other users**.
 
 The password will be stored as a hash value for security. The username can't be repeated in the database. An authorization token will be automatically provided to the user when created.
 
 
-#### Currently available requests
+### Currently available requests
 These are all the available requests to get and manipulate the customers data. Token authorization is needed for all of them.
 
 - '/customers'
@@ -131,7 +131,14 @@ These are all the available requests to get and manipulate the customers data. T
 
 - To get a customer's image, send a GET request to it's `img_url`. For example, if you want to get the default image: '/media/images/default.png'
 
-#### Image uploads
+### Image uploads
 Whenever customer with an image is created, the image will be stored in the project's image folder (configured in 'settings.py'). If no image is set when creating a customer, it will automatically get the default one.
 
 In order to decrease the image storage capacity, every uploaded image will be cropped if it doesn't fit the maximum configured size. Moreover, when a customer's image is updated, the previous image will be removed from the images folder.
+
+
+## Project testing
+To run all the project's tests, simply run the next command:
+```Shell
+python manage.py test
+```

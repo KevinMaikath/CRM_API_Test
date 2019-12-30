@@ -164,7 +164,6 @@ class CustomerDetailTest(APITestCase):
             '/customer/1',
             data=json.dumps(new_data),
             content_type='application/json')
-        print(response.data)
         expected_error = 'Not a valid string.'
         self.assertEqual(response.data.get('name')[0], expected_error)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
