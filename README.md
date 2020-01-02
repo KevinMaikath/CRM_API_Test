@@ -1,9 +1,16 @@
 # CRM_API_Test
 CRM Service - API using Django-REST-Framework
 
+## Getting started
+Everything you need to know to run this API is explained in this README. However, for an initial set-up and run, it is recommended follow this section order:
+1. [Install project's dependencies](#dependencies)
+2. Connect the API to your database. You can use the default [sqlite3 file](#database-set-up) or a larger [MySQL database](#mysql-migration).
+3. [Create the first user (superuser)](#superuser-creation).
+4. [Set a default user image](#image-upload-settings).
+
+Now the API should be ready to run. Check the [API Usage](#api-usage) for more details.
 
 ## Project set-up
-
 
 ### Dependencies
 This project has been developed using a virtual environment. In order to install all the dependencies needed for this project, run the following steps in your terminal:
