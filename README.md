@@ -142,3 +142,20 @@ To run all the project's tests, simply run the next command:
 ```Shell
 python manage.py test
 ```
+
+## Docker build
+In order to build the project and run it as a Docker container, follow the next steps:
+1. Build the Docker image:
+```Shell
+docker-compose build
+```
+
+2. Connect and migrate to the database (creates an sqlite3 file if it doesn't exist):
+```Shell
+docker-compose run web python manage.py migrate
+```
+
+3. Run the Docker image:
+```Shell
+docker-compose up
+```
