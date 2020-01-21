@@ -120,7 +120,7 @@ STATIC_URL = '/static/'
 # Django REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+        'CRM_API.authentication.ExpiringTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
@@ -136,3 +136,6 @@ IMAGE_FORMAT = 'png'
 IMAGE_MAX_HEIGHT = 300
 IMAGE_MAX_WIDTH = 300
 DEFAULT_IMAGE_FILE = 'default.png'
+
+# Authentication variables
+AUTH_TOKEN_EXPIRY_TIME_SECONDS = 60

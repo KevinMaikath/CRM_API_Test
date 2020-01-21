@@ -95,6 +95,7 @@ This API uses token authentication. To get the token from an exiting user:
 'Authorization': 'Token 1234'
 ```
 
+The token expiry time is given by a settings variable. It has a default value of 60 seconds, but you can change it in 'settings.py'.
 
 ### Superuser creation
 Creating a superuser is always needed to start using the API, as the database might be initially empty and you will probably need to create other users. In order to create a new superuser, run the next command in your terminal:

@@ -1,12 +1,11 @@
-from PIL import Image
-
+from CRM_API.authentication import token_expire_handler
 from CRM_API.models import Customer
 from CRM_API.serializers import CustomerInfoSerializer, CustomerCreationSerializer, UserSerializer
 
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 
-from rest_framework import status, generics
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -85,6 +84,7 @@ class LoginView(APIView):
         username = request.data.get('username')
         password = request.data.get('password')
         user = authenticate(username=username, password=password)
+        token_expire_handler(user.auth_token)
         if user:
             return Response({'token': user.auth_token.key})
         else:
