@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 
 from CRM_API.models import Customer
-from CRM_API.serializers import CustomerInfoSerializer, CustomerCreationSerializer, UserSerializer
+from CRM_API.serializers import CustomerInfoSerializer, CustomerCreationSerializer
+from users.serializers import UserSerializer
 
 
 class CustomerInfoSerializerTest(TestCase):
@@ -114,7 +115,8 @@ class UserSerializerTest(TestCase):
         data = {
             'username': 'newUser',
             'email': 'user@user.user',
-            'password': '1234'
+            'password': '1234',
+            'is_superuser': False
         }
         user_serial = UserSerializer(data=data)
         self.assertTrue(user_serial.is_valid())

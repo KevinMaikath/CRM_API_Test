@@ -11,6 +11,14 @@ class CustomerInfoSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'surname', 'img_url')
 
 
+# Delete a customer's previous image if it isn't the default image.
+def delete_previous_image(customer):
+    if str(customer.img_url) != settings.DEFAULT_IMAGE_FILE:
+        path_to_delete = (settings.MEDIA_ROOT + '/' + str(customer.img_url))
+        if os.path.exists(path_to_delete):
+            os.remove(path_to_delete)
+
+
 class CustomerCreationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
@@ -21,13 +29,8 @@ class CustomerCreationSerializer(serializers.ModelSerializer):
         instance.surname = validated_data.get('surname', instance.surname)
 
         # Update the image only if requested.
-        if instance.img_url != settings.IMAGE_FOLDER + str(validated_data.get('img_url')):
-
-            # Delete the previous one if it isn't the default image.
-            if str(instance.img_url) != settings.IMAGE_FOLDER + settings.DEFAULT_IMAGE_FILE:
-                path_to_delete = (settings.MEDIA_ROOT + '/' + str(instance.img_url))
-                if os.path.exists(path_to_delete):
-                    os.remove(path_to_delete)
+        if instance.img_url != str(validated_data.get('img_url')):
+            delete_previous_image(instance)
 
             instance.img_url = validated_data.get('img_url')
 

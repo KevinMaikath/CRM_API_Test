@@ -7,8 +7,8 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase, APIClient
 
-from ..models import Customer
-from ..serializers import CustomerInfoSerializer
+from CRM_API.models import Customer
+from CRM_API.serializers import CustomerInfoSerializer
 
 default_img_url = settings.MEDIA_URL + settings.IMAGE_FOLDER + settings.DEFAULT_IMAGE_FILE
 
@@ -106,7 +106,7 @@ class CustomerDetailTest(APITestCase):
     # Successfully get a customer by it's id.
     def test_get_customer(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.get('/customer/1')
+        response = self.client.get('/customers/1')
         customer = Customer.objects.first()
         expected_data = {
             'id': customer.id,
@@ -119,7 +119,7 @@ class CustomerDetailTest(APITestCase):
 
     # Try to get a customer without authentication.
     def test_get_customer_no_authentication(self):
-        response = self.client.get('/customer/1')
+        response = self.client.get('/customers/1')
         error_data = 'Authentication credentials were not provided.'
         self.assertEqual(response.data.get('detail'), error_data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -127,7 +127,7 @@ class CustomerDetailTest(APITestCase):
     # Try to get a nonexistent customer.
     def test_get_nonexistent_customer(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.get('/customer/10')
+        response = self.client.get('/customers/10')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     # Successfully update a customer (without image).
@@ -137,7 +137,7 @@ class CustomerDetailTest(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token_2.key)
         new_data = {'name': 'newName', 'surname': 'newSurname'}
         response = self.client.put(
-            '/customer/1',
+            '/customers/1',
             data=json.dumps(new_data),
             content_type='application/json')
         expected_data = {
@@ -161,7 +161,7 @@ class CustomerDetailTest(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token_2.key)
         new_data = {'name': [1, 2, 3]}
         response = self.client.put(
-            '/customer/1',
+            '/customers/1',
             data=json.dumps(new_data),
             content_type='application/json')
         expected_error = 'Not a valid string.'
@@ -171,7 +171,7 @@ class CustomerDetailTest(APITestCase):
     # Successfully delete a customer.
     def test_delete_customer(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.delete('/customer/3')
+        response = self.client.delete('/customers/3')
         message = 'The customer has been successfully deleted.'
         self.assertEquals(response.data.get('message'), message)
         self.assertEquals(response.status_code, status.HTTP_202_ACCEPTED)
@@ -182,10 +182,10 @@ class CustomerDetailTest(APITestCase):
     # Try to get a deleted customer.
     def test_delete_and_get_customer(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        delete_response = self.client.delete('/customer/3')
+        delete_response = self.client.delete('/customers/3')
         message = 'The customer has been successfully deleted.'
         self.assertEquals(delete_response.data.get('message'), message)
         self.assertEquals(delete_response.status_code, status.HTTP_202_ACCEPTED)
 
-        get_response = self.client.get('/customer/3')
+        get_response = self.client.get('/customers/3')
         self.assertEqual(get_response.status_code, status.HTTP_404_NOT_FOUND)
