@@ -1,10 +1,7 @@
 import os
 
 from django.conf import settings
-from django.contrib.auth.models import User
 from rest_framework import serializers
-from rest_framework.authtoken.models import Token
-
 from CRM_API.models import Customer
 
 
@@ -37,20 +34,3 @@ class CustomerCreationSerializer(serializers.ModelSerializer):
         instance.last_updated_by_id = validated_data.get('last_updated_by', instance.last_updated_by_id)
         instance.save()
         return instance
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'password')
-        extra_kwargs = {'password': {'write_only': True}}
-
-    def create(self, validated_data):
-        user = User(
-            email=validated_data['email'],
-            username=validated_data['username']
-        )
-        user.set_password(validated_data['password'])
-        user.save()
-        Token.objects.create(user=user)
-        return user
