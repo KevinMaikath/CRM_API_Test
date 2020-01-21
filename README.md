@@ -125,27 +125,13 @@ An authorization token will be automatically provided to the user when created.
 
 
 ### Currently available requests
-These are all the available requests to get and manipulate the customers data. Token authorization is needed for all of 
-them.
+This API uses Swagger (OpenAPI) for its documentation.
+You can get all the available API paths in different ways, sending a GET request to:
 
-- '/customers'
-  - GET: returns a list with all the customers.
-  - POST: creates a customer instance into the database. 
-  
-    Required parameters:
-      - `name`: customers name.
-      - `surname`: customers surname.
-      
-      Optional parameters:
-      - `img_url`: URL for the customers image.
-
-- '/customer/{customerID}'
-  - PUT: updates the specified customer. All parameters (`name`, `surname` and `img_url`) are optional.
-  - DELETE: deletes the specified customer.
-
-
-- To get a customer's image, send a GET request to it's `img_url`. For example, if you want to get the default image: 
-'/media/images/default.png'
+- '/swagger': show the default Swagger UI.
+- '/swagger.json': return the Swagger-generated docs as a JSON file.
+- '/swagger.yaml': return the Swagger-generated docs as a YAML file.
+- '/redoc': show a summarized documentation of the API's paths.
 
 ### Image uploads
 Whenever customer with an image is created, the image will be stored in the project's image folder 

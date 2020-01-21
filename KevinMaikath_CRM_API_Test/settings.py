@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'CRM_API',
     'rest_framework.authtoken',
-    'users'
+    'users',
+    'drf_yasg'
 ]
 
 MIDDLEWARE = [
@@ -126,7 +127,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-    )
+    ),
 }
 
 # Image upload
